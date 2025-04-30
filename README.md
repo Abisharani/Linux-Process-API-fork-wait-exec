@@ -22,71 +22,89 @@ Write the C Program using Linux Process API - fork(), wait(), exec()
 Test the C Program for the desired output. 
 
 # PROGRAM:
+NAME:ABISHA RANI S
 
+REG NO:212224040012
 ## C Program to create new process using Linux API system calls fork() and getpid() , getppid() and to print process ID and parent Process ID using Linux API system calls
 
+```
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
 
+int main() {
+    int pid = fork();
 
+    if (pid == 0) { 
+        printf("I am child, my PID is %d\n", getpid()); 
+        printf("My parent PID is: %d\n", getppid()); 
+        sleep(2);  // Keep child alive for verification
+    } else { 
+        printf("I am parent, my PID is %d\n", getpid()); 
+        wait(NULL); 
+    }
+}
 
-
-
-
-
-
-
-
-
+```
 
 ##OUTPUT
 
 
-
-
-
+![image](https://github.com/user-attachments/assets/e27fd012-8ac9-4d1e-84fd-7bb473cec623)
 
 
 
 ## C Program to execute Linux system commands using Linux API system calls exec() , exit() , wait() family
 
+```
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <unistd.h>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+int main() {
+    int status;
+    
+    printf("Running ps with execl\n");
+    if (fork() == 0) {
+        execl("ps", "ps", "-f", NULL);
+        perror("execl failed");
+        exit(1);
+    }
+    wait(&status);
+    
+    if (WIFEXITED(status)) {
+        printf("Child exited with status: %d\n", WEXITSTATUS(status));
+    } else {
+        printf("Child did not exit successfully\n");
+    }
+    
+    printf("Running ps with execlp (without full path)\n");
+    if (fork() == 0) {
+        execlp("ps", "ps", "-f", NULL);
+        perror("execlp failed");
+        exit(1);
+    }
+    wait(&status);
+    
+    if (WIFEXITED(status)) {
+        printf("Child exited for execlp with status: %d\n", WEXITSTATUS(status));
+    } else {
+        printf("Child did not exit successfully\n");
+    }
+    
+    printf("Done.\n");
+    return 0;
+}
+```
 
 
 
 ##OUTPUT
 
 
-
-
-
-
-
-
-
-
-
-
-
+![image](https://github.com/user-attachments/assets/2d3e5d8b-eafa-495b-b239-ee29c89c13ae)
 
 
 
